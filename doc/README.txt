@@ -5,9 +5,7 @@ Pour éditer les schémas, il faut utiliser le logiciel Fritzing
 doc pour les sensors:
 	https://learn.adafruit.com/tmp36-temperature-sensor/using-a-temp-sensor
 	https://learn.adafruit.com/photocells/using-a-photocell
-	https://learn.adafruit.com/photocells/using-a-photocell
 
-
-
-On pourrait faire un truc pour le vent, quitte a recuperer de l'energie ?
-
+connexion du module nRF24 avec raspberry:
+	https://rlogiacco.wordpress.com/2014/02/26/nrf24-on-raspberry-pi/
+	
