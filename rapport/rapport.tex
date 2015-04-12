@@ -1,0 +1,67 @@
+\documentclass[a4paper, titlepage, oneside, 12pt]{article}%      autres choix : book  report
+
+\usepackage[utf8]{inputenc}%           gestion des accents (source)
+\usepackage[T1]{fontenc}%              gestion des accents (PDF)
+\usepackage[francais]{babel}%          gestion du français
+\usepackage{textcomp}%                 caractères additionnels
+\usepackage{mathtools,  amssymb, amsthm}% packages de l'AMS + mathtools
+\usepackage{lmodern}%                  police de caractère
+\usepackage{geometry}%                 gestion des marges
+\usepackage{graphicx}%                 gestion des images
+\usepackage{xcolor}%                   gestion des couleurs
+\usepackage{array}%                    gestion améliorée des tableaux
+\usepackage{calc}%                     syntaxe naturelle pour les calculs
+\usepackage{titlesec}%                 pour les sections
+\usepackage{titletoc}%                 pour la table des matières
+\usepackage{fancyhdr}%                 pour les en-têtes
+\usepackage{titling}%                  pour le titre
+\usepackage[framemethod=TikZ]{mdframed}% print frames
+\usepackage{caption}%                  for captionof
+\usepackage{listings}
+\usepackage{enumitem}%                 pour les listes numérotées
+\usepackage{microtype}%                améliorations typographiques
+\usepackage{csvsimple}%                 convertir un fichier .csv en tableau
+
+\usepackage{hyperref}%                 gestion des hyperliens
+
+\usepackage{titling} %  				  gestion des subtitles 
+\newcommand{\subtitle}[1]{%			  definition d'une nouvelle commande sous-titre
+  \posttitle{%
+    \par\end{center}
+    \begin{center}\large#1\end{center}
+    \vskip0.5em}%
+}                
+
+\hypersetup{%
+    pdfborder = {0 0 0}
+}
+
+                                    
+\title{Projet PERI :\\ Dispositif météorologique}
+\subtitle{Rapport de projet}
+
+\author{ Paul MABILLOT \& Adrien FERREIRA \& Pierre MAHÉ}
+\date{\today}
+ 
+
+
+\begin{document} 
+
+\begin{figure}[h]
+\maketitle 
+\end{figure}
+
+\begin{figure}[b]
+	\includegraphics[width=100px] {upmc_logo.jpg}
+\end{figure}
+
+\newpage   
+   
+\tableofcontents
+
+\newpage
+
+\section{Description du projet}
+
+
+\end{document}
