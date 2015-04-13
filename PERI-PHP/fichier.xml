@@ -1,0 +1,22 @@
+﻿<meteo>
+	<timestamp valeur="13">
+		<luminosite>1</luminosite>
+		<temperature>1</temperature>
+		<humidite>15</humidite>
+	</timestamp>
+	<timestamp valeur="14">
+		<luminosite>1</luminosite>
+		<temperature>1</temperature>
+		<humidite>15</humidite>
+	</timestamp>
+	<timestamp valeur="15">
+		<luminosite>1</luminosite>
+		<temperature>1</temperature>
+		<humidite>15</humidite>
+	</timestamp>	
+	<timestamp valeur="15">
+		<luminosite>10</luminosite>
+		<temperature>10</temperature>
+		<humidite>150</humidite>
+	</timestamp>	
+</meteo>
