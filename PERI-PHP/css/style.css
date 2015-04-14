@@ -1,0 +1,72 @@
+p{
+	font-size: 300%;
+	text-align: right;
+}
+body{
+	margin:auto;
+}
+#meteo{
+	width: 1000px;
+	height: 600px;
+	position: relative;	
+	margin:auto;
+}
+
+#station{
+	border-style: double;
+    border-width: 5px;
+	
+	width: 233px;
+	height: 500px;
+	
+	position: absolute;
+	left: 0px;
+}
+
+#recap{
+	border-style: double;
+    border-width: 5px;
+	
+	width: 666px;
+	height: 500px;
+	
+	position: absolute;
+	left:250px;	
+}
+#chart_div{
+margin-left: 10px;
+}
+
+#img_lum{
+	position: absolute;
+	top:0;
+	left:0;
+}
+
+#lum{
+	width: 233px;
+}
+#hum{
+	width: 213px;
+	position: absolute;
+	top:360px;
+	right:60px;	
+}
+#goutte{
+	position: absolute;
+	top:420px;
+	right:20px;		
+}
+#heure{
+	width: 213px;
+	position: absolute;
+	top:150px;
+	right:20px;	
+	font-size: 350%;
+}
+#temp{
+	position: absolute;
+	top:300px;
+	left:0;
+	width: 213px;
+}
