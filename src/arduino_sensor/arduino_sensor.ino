@@ -1,21 +1,53 @@
 #include <SimpleTimer.h>
+#include <SPI.h>
+#include <RF24.h>
+#include <RF24Network.h>
 
+/* radio */
+#define RADIO_CE_PIN 8
+#define RADIO_CS_PIN 7
+
+#define RADIO_RETRY_DELAY 0
+#define RADIO_RETRY_COUNT 0
+
+RF24 radio = RF24(RADIO_CE_PIN, RADIO_CS_PIN);
+const uint64_t pipes[2] = { 0xF0F0F0F0E1LL, 0xF0F0F0F0D2LL };        // pourquoi ces valeurs ?? je ne sais pas
+
+
+typedef struct payload{
+  unsigned long ts;
+  int16_t pc;
+  int16_t tc;
+} Payload;
+
+/* sensor */
 int DELAY= 1000;            //une seconde
 
-SimpleTimer timerSend;
-
 int photocellPin= 0;        // d'apres les schemas de Fritzing
-int temperaturePin= 1;
+int temperatureCellPin= 1;
 
-int valTemp;
-int valLight;
 
+
+SimpleTimer timerSend;
+Payload data;
 unsigned long timeStamp=0;   // ulong: 2^32= 13,8 ans si DELAY= 100 ms 138 ans si DELAY= 1s
+
 
 
 void setup(void){
   Serial.begin(9600);
-  timerSend.setInterval(DELAY, sendData);    
+  pinMode(A0, INPUT);
+  pinMode(A1, INPUT);
+  
+  radio.begin();
+  radio.setRetries(RADIO_RETRY_DELAY, RADIO_RETRY_COUNT);
+  radio.setDataRate(RF24_250KBPS);
+  radio.setPALevel(RF24_PA_MAX);
+  radio.setPayloadSize(sizeof(Payload));
+  radio.openWritingPipe(pipes[0]);
+  radio.openReadingPipe(1, pipes[1]);
+  
+  timerSend.setInterval(DELAY, sendData);
 }
 
 
@@ -25,20 +57,21 @@ void loop(void){
 
 
 void sendData(void){
-  Serial.println(millis());
-  
-  
   //recuperation valeurs capteurs
-  valTemp=  analogRead(temperaturePin);       
-  valLight= analogRead(photocellPin);
+  data.tc= analogRead(temperatureCellPin);       
+  data.pc= analogRead(photocellPin);
   
-  Serial.println(valTemp);    //debbug
-  Serial.println(valLight);
+  Serial.println(data.tc);    //debbug
+  Serial.println(data.pc);
   
    // commencer a emettre
-   //send timeStamp
-   // envoyer par ondes temperature et lumiere 
+   radio.powerUp();
+   //send payload
+   if(radio.write(&data, sizeof(Payload)) == false){
+     Serial.println("Error send data");
+   }
    //arreter d'emettre
-      
-  timeStamp+=1;
+   radio.powerDown();
+  
+  data.ts++;
 }
