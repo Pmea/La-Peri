@@ -1,6 +1,20 @@
 ﻿    google.load('visualization', '1.1', {packages: ['line']});
     google.setOnLoadCallback(drawChart);
-
+	
+	
+	var tab = new Array();
+	
+	function loadData() {
+		
+		$.ajax({
+			type   : 'GET',
+			url    : 'getAll.php',
+			success: function(msg) {
+				tab = msg.split(" ");
+			}
+		});			
+	}
+	
     function drawChart() {
 
       var data = new google.visualization.DataTable();
@@ -8,6 +22,7 @@
       data.addColumn('number', 'Humidité');
       data.addColumn('number', 'Temperature');
 
+	  
 	  /* A traiter */
       data.addRows([
         ["Lundi",  37.8, 20.8],
