@@ -47,6 +47,19 @@ void setup(void){
   radio.openWritingPipe(pipes[0]);
   radio.openReadingPipe(1, pipes[1]);
   
+  
+  /// pour recuperer le time de l'ordinateur
+  /*radio.powerUp();
+  radio.startListening();
+  
+  while(!radio.available()){}   // on attend que ca soit possible 
+  
+  radio.read(&data, sizeof(Payload));
+  
+  radio.stopListening();
+  radio.powerDown();
+  */
+  
   timerSend.setInterval(DELAY, sendData);
 }
 
