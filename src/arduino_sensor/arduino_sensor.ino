@@ -46,8 +46,7 @@ void setup(void){
   radio.setPayloadSize(sizeof(Payload));
   radio.openWritingPipe(pipes[0]);
   radio.openReadingPipe(1, pipes[1]);
-  
-  
+ 
   /// pour recuperer le time de l'ordinateur
   /*radio.powerUp();
   radio.startListening();
