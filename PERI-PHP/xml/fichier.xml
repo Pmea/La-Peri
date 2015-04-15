@@ -19,4 +19,9 @@
 		<temperature>10</temperature>
 		<humidite>150</humidite>
 	</timestamp>	
+	<timestamp valeur="15">
+		<luminosite>100</luminosite>
+		<temperature>16.0</temperature>
+		<humidite>10</humidite>
+	</timestamp>	
 </meteo>

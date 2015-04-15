@@ -2,15 +2,13 @@
 
 function getAllValues($path){
 	$xml = simplexml_load_file($path);
-	
-	foreach($xml as $data){
-		echo 'Time: '.$data['valeur'].'<br>';
-		echo 'Temperature: '.$data->temperature.'<br>';
-		echo 'Humidite: '.$data->humidite.'<br>';
-		echo 'Luminosite: '.$data->luminosite.'<br>';
-		echo '<br>';
+	$tab = '';
+	for($i = 0; $i < sizeof($xml); $i++){
+		$last = $xml->timestamp[$i];
+		$res = $last['valeur'].' '.$last->temperature.' '.$last->humidite.' '.$last->luminosite;
+		$tab = $tab . " " . $res;
 	}
-	
+	return $tab;
 }
 
 /* Recupere la valeur a du timestamp a l'indice "indice" */
