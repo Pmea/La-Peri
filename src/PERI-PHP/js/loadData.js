@@ -1,7 +1,6 @@
 ﻿
-/* Demarre la loop et l'execute toute les 1 seconde */
-/* Appel AJAX et mise a jour du HTML avec les données reçues */
-
+var clignotement = 1;
+	
 $(document).ready( 
 
 function loop() {
@@ -18,7 +17,9 @@ function loop() {
 				var tab = msg.split(' ');
 				
 				traitementLumino(tab[3], tab[2], heure);
-				$("#heure").html(heure+":"+minute);				
+				traitementHeure(heure, minute);
+
+					
 				$("#temp").html(tab[1]+" °c");
 				$("#hum").html(tab[2]+"%");
 			}
@@ -46,4 +47,15 @@ function traitementLumino(val, hum, heure){
 		$("#img_lum").attr("src", "img/nuage.jpg");
 	}
 
+}
+
+function traitementHeure(heure, minute){
+				
+	if(clignotement == 1){
+		$("#heure").html(heure+":"+minute);				
+		clignotement = 0;
+	}else{
+		$("#heure").html(heure+" "+minute);				
+		clignotement = 1;				
+	}
 }

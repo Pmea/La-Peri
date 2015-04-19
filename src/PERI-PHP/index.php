@@ -7,7 +7,7 @@
 	<title>Site météorologique</title>
 	
 		
-    <script type="text/javascript" src="js/jsapi.js"></script>
+    <!-- <script type="text/javascript" src="js/jsapi.js"></script> -->
 	<script src="js/jquery-1.11.2.min.js"></script>
     <script src="js/loadData.js"></script>
 	<script src="js/loadGraphe.js"></script>

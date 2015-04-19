@@ -14,12 +14,12 @@
 		<temperature>1</temperature>
 		<humidite>15</humidite>
 	</timestamp>	
-	<timestamp valeur="15">
+	<timestamp valeur="16">
 		<luminosite>10</luminosite>
 		<temperature>10</temperature>
 		<humidite>150</humidite>
 	</timestamp>	
-	<timestamp valeur="15">
+	<timestamp valeur="17">
 		<luminosite>100</luminosite>
 		<temperature>16.0</temperature>
 		<humidite>10</humidite>

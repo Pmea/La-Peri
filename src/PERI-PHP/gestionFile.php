@@ -13,22 +13,33 @@ function getAllValues($path){
 
 /* Recupere la valeur a du timestamp a l'indice "indice" */
 function getValue($path, $indice){
-	$xml = simplexml_load_file($path);
+	$fp = fopen($path, "r");
 	
-	if($indice >= sizeof($xml))
-		return null;
-	
-	$last = $xml->timestamp[$indice];
+	if (flock($fp, LOCK_SH)) {
+		$xml = simplexml_load_file($path);
+		flock($fp, LOCK_UN);
+		
+		if($indice >= sizeof($xml))
+			return null;
+
+		$last = $xml->timestamp[$indice];
+	}
 	
 	return $last['valeur'].' '.$last->temperature.' '.$last->humidite.' '.$last->luminosite;
 }
 
 /* Recupere la valeur a du dernier timestamp */
 function getLastValue($path){
-	$xml = simplexml_load_file($path);
-	$taille = sizeof($xml);
+	$fp = fopen($path, "r");
 	
-	$last = $xml->timestamp[$taille-1];
+	if (flock($fp, LOCK_SH)) {
+		$xml = simplexml_load_file($path);
+		flock($fp, LOCK_UN);
+		
+		$taille = sizeof($xml);
+		
+		$last = $xml->timestamp[$taille-1];	
+	}
 	
 	return $last['valeur'].' '.$last->temperature.' '.$last->humidite.' '.$last->luminosite;
 }
