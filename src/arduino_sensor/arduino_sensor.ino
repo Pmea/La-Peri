@@ -3,33 +3,28 @@
 #include <RF24.h>
 #include <RF24Network.h>
 
-/* radio */
-#define RADIO_CE_PIN 8
-#define RADIO_CS_PIN 7
+#include "config.h"
 
-#define RADIO_RETRY_DELAY 0
-#define RADIO_RETRY_COUNT 0
+/* radio */
+#define RADIO_CE_PIN 9
+#define RADIO_CS_PIN 53
+
 
 RF24 radio = RF24(RADIO_CE_PIN, RADIO_CS_PIN);
-const uint64_t pipes[2] = { 0xF0F0F0F0E1LL, 0xF0F0F0F0D2LL };        // pourquoi ces valeurs ?? je ne sais pas
+//const uint64_t pipes[2] = { 0x0000000001LL, 0xF0F0F0F0D2LL };       
 
-
-typedef struct payload{
-  unsigned long ts;
-  int16_t pc;
-  int16_t tc;
-} Payload;
 
 /* sensor */
-int DELAY= 1000;            //une seconde
+int DELAY= 1000;    
 
-int photocellPin= 0;        // d'apres les schemas de Fritzing
+int photocellPin= 0;       
 int temperatureCellPin= 1;
 
 
 
 SimpleTimer timerSend;
-Payload data;
+
+payload data;
 unsigned long timeStamp=0;   // ulong: 2^32= 13,8 ans si DELAY= 100 ms 138 ans si DELAY= 1s
 
 
@@ -40,26 +35,25 @@ void setup(void){
   pinMode(A1, INPUT);
   
   radio.begin();
-  radio.setRetries(RADIO_RETRY_DELAY, RADIO_RETRY_COUNT);
-  radio.setDataRate(RF24_250KBPS);
   radio.setPALevel(RF24_PA_MAX);
-  radio.setPayloadSize(sizeof(Payload));
-  radio.openWritingPipe(pipes[0]);
-  radio.openReadingPipe(1, pipes[1]);
- 
-  /// pour recuperer le time de l'ordinateur
-  /*radio.powerUp();
-  radio.startListening();
+  radio.setDataRate(RF24_1MBPS);
   
+  radio.openWritingPipe(0x0000000001LL);
+  radio.openReadingPipe(1, 0xF0F0F0F0D2LL);
+
+  
+  radio.startListening();
+  /// pour recuperer le time de l'ordinateur
+  /*
   while(!radio.available()){}   // on attend que ca soit possible 
   
   radio.read(&data, sizeof(Payload));
   
   radio.stopListening();
-  radio.powerDown();
   */
   
   timerSend.setInterval(DELAY, sendData);
+  data.timeStamp=0;
 }
 
 
@@ -70,20 +64,19 @@ void loop(void){
 
 void sendData(void){
   //recuperation valeurs capteurs
-  data.tc= analogRead(temperatureCellPin);       
-  data.pc= analogRead(photocellPin);
+  data.valTemperature= analogRead(temperatureCellPin);       
+  data.valLight= analogRead(photocellPin);
+  data.valHumidity= 0;
   
-  Serial.println(data.tc);    //debbug
-  Serial.println(data.pc);
+  Serial.println(data.timeStamp);
+  Serial.println(data.valTemperature);    //debbug
+  Serial.println(data.valLight);
   
    // commencer a emettre
-   radio.powerUp();
+    radio.stopListening();
    //send payload
-   if(radio.write(&data, sizeof(Payload)) == false){
-     Serial.println("Error send data");
-   }
+   radio.write(&data, sizeof(payload));
    //arreter d'emettre
-   radio.powerDown();
-  
-  data.ts++;
+    radio.startListening();  
+    data.timeStamp++;
 }
