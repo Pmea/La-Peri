@@ -28,13 +28,13 @@ body{
     border-width: 5px;
 	
 	width: 666px;
-	height: 500px;
+	height: 500px;	
 	
 	position: absolute;
 	left:250px;	
 }
-#chart_div{
-margin-left: 10px;
+#chart1{
+	margin:auto;
 }
 
 #img_lum{

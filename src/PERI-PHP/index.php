@@ -7,8 +7,10 @@
 	<title>Site météorologique</title>
 	
 		
-    <!-- <script type="text/javascript" src="js/jsapi.js"></script> -->
-	<script src="js/jquery-1.11.2.min.js"></script>
+	<script src="js/jquery-1.11.2.min.js"></script>	
+	<script type="text/javascript" src="js/jqPlot/jquery.jqplot.min.js"></script>	
+    <script type="text/javascript" src="js/jqPlot/plugins/jqplot.canvasTextRenderer.min.js"></script>
+	<script type="text/javascript" src="js/jqPlot/plugins/jqplot.canvasAxisLabelRenderer.min.js"></script>	
     <script src="js/loadData.js"></script>
 	<script src="js/loadGraphe.js"></script>
 	</head>
@@ -28,7 +30,7 @@
 			</section>
 			
 			<section id="recap">
-			<div id="chart_div"></div>
+			<div id="chart1" style="height:500px; width:600px;"></div>
 			</section>
 		</section>
 	</body>
