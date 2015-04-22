@@ -17,10 +17,12 @@
 \usepackage{titling}%                  pour le titre
 \usepackage[framemethod=TikZ]{mdframed}% print frames
 \usepackage{caption}%                  for captionof
-\usepackage{listings}
+\usepackage{listingsutf8}
+
 \usepackage{enumitem}%                 pour les listes numérotées
 \usepackage{microtype}%                améliorations typographiques
 \usepackage{csvsimple}%                 convertir un fichier .csv en tableau
+
 
 \usepackage{hyperref}%                 gestion des hyperliens
 
@@ -31,6 +33,33 @@
     \begin{center}\large#1\end{center}
     \vskip0.5em}%
 }                
+\lstset{language=c++}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+ 
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,
+    otherkeywords={uint16_t},                  
+    showspaces=false,                
+    showstringspaces=false,
+    inputencoding=latin1,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
 
 \hypersetup{%
     pdfborder = {0 0 0}
@@ -62,6 +91,103 @@
 \newpage
 
 \section{Description du projet}
+\section{Montage}
+\subsection{Arduino}
 
+\paragraph{}
+Faire le montage suivant votre carte Arduino. \\ 
+Pour les cartes Nano et One les branchements sont similaire. À noter que nous n'utilisons pas de led externe mais celle intégrée au circuit.
+\newline
+\\
+	\includegraphics[width=400px] {montage-arduino-nrF24.jpg}
+
+\paragraph{}
+Pour l'arduino Mega le montage est un peu différent.
+Branchez le pin CSN(SS) au pin D53, le SCK au pin D52, le MOSI au pin D51 et le MISO au pin D50.
+\newline
+\\
+\includegraphics[width=400px] {montage-arduino-mega-nrF24.jpg}
+
+\subsection{Raspberry Pi}
+\paragraph{}
+Faire le montage suivant sur votre carte Raspberry Pi.\\ Dans cet exemple, nous avons utilisé une Raspberry Pi modèle B mais pour les modèles B+ et 2 la retro-compatibilité est assurée, il suffit de procéder au même branchement que le schéma.
+\newline
+\\
+\includegraphics[width=400px] {montage-raspberry-nrF24.jpg}
+
+\paragraph{}
+\textbf{Attention: Le module nRF24 est fragile, il n'accepte qu'une alimentation 3.3V, ne surtout pas le brancher sur le pin 5V au risque de l'endommager.}
+
+\section{Codage}
+\subsection{Structure de données}
+Cette structure est commune aux deux cartes, elle permet de structurer les données envoyées.
+\begin{lstlisting}
+typedef struct t_payload{
+	uint16_t cmd;
+	uint16_t timeStamp;
+	uint16_t valLight;
+	uint16_t valTemperature;
+	uint16_t valHumidity;
+} payload;
+\end{lstlisting}
+%TODO endianness, alignement données, changer t_payload
+Pour garantir l’interopérabilité, il est impératif de définir explicitement la taille des types manipulés.  
+L'endianess sur l'Arduino et la Raspberry étant identique il n'a pas été nécessaire d'opérer à des conversions, attention cependant au portage sur d'autres systèmes.
+\texttt{cmd} utile pour définir le type de traitement à réaliser (cf: Protocole).
+Les autres champs sont présent pour stocker les données à proprement parler.
+\subsection{Arduino}
+\paragraph{}
+Pour envoyer les données a intervalle reguliere, vous devez installer la bibliothèque \href{http://playground.arduino.cc/Code/SimpleTimer?ref=driverlayer.com/web}{\textit{SimpleTimer}} (téléchargeable sur le site officiel Arduino).\\
+Il faut tout d'abord armer un timer avec un temps (en milliseconde) et un pointeur de fonction (sans paramètre) dans le \texttt{setup}. Dans le \texttt{loop}, appelez la fonction \texttt{run}.\\
+\begin{lstlisting}
+SimpleTimer timer;
+timer.setInterval(DELAY, fctnCallback);
+timer.run()
+\end{lstlisting}
+
+
+\paragraph{}
+Pour communiquer avec la module nRF24L01+, vous devez installer une seconde bibliothèque.
+\href{https://github.com/stanleyseow/RF24}{\textit{lien du dépôt}}. Seul les fichiers \texttt{RF24.cpp} et \texttt{RF24.h} sont à copier dans le dossier \texttt{libraries} de l'IDE sketch.
+\\ \\
+\subsubsection{Initialisation}
+La sequence d'instruction à utiliser pour initialiser le module nRF24 est:\\
+
+\begin{lstlisting}
+radio.begin();
+radio.setPALevel(RF24_PA_MAX);	// la force d'emission du signal
+radio.setDataRate(RF24_1MBPS);	// le debit de donnees
+
+// identifiant arbitraire du canal de emission 
+radio.openWritingPipe(0x0000000001LL);
+// identifiant du canal de reception pour le pipe 1
+radio.openReadingPipe(1, 0x0000000002LL);
+\end{lstlisting}
+\paragraph{}
+\textbf{Attention: Il n'est possible d’écouter que sur 6 canaux simultanément.\\}
+Attention à correctement synchroniser les canaux utilisés par les nœuds. Si deux modules écrivent sur le même canal, des collisions vont apparaître.
+
+\subsubsection{Lecture}
+Avant de pouvoir envoyer des données grâce au module nRF24, il faut l'activer en lecture grâce à l'instruction : \texttt{startListening()}.
+Pour savoir si une donnée est en attente dans le buffer de réception, il faut utiliser l'instruction \texttt{avaiable()} non-bloquante.
+Pour récupérer la valeur, il faut utiliser \texttt{read}.
+
+\subsubsection{Écriture}
+Il n'est pas possible d'écouter et d'émettre simultanément. De ce fait, avant une écriture, il faut prendre soin d'appeler \texttt{stopListening()} pour arrêter l'écoute. Ensuite, utilisez \texttt{write()} pour envoyer les données.
+Ne pas oublier de réactiver l'écoute ensuite.
+
+\subsection{Raspberry Pi}
+Pour communiquer avec la module nRF24L01+ depuis la Raspberry, utilisez les fonctions présentes dans les fichiers \texttt{RF24.cpp}, \texttt{RF24.h}, \texttt{bcm2835.c} et \texttt{bcm2835.h}.
+
+\subsubsection{Initialisation}
+\subsubsection{Lecture}
+\subsubsection{Écriture}
+??
+
+\section{Protocole de niveau applicatif}
+Pour pouvoir synchroniser les horloges des deux cartes, nous avons créé un protocole simple.
+Au démarrage l'Arduino envoi un message avec \texttt{cmd = INIT } et se met en attente de la réponse de la Raspberry. Quand elle reçoit ce paquet la Rasperry répond avec son estampille temporelle dans \texttt{timestamp} et \texttt{cmd = INIT}. L'Arduino sauvegarde cette valeur et l'utilisera pour dater ses envois (en l'incrémentant).
+De ce fait, si la carte Arduino venait à s'éteindre, elle cherchera à se re-synchroniser au démarrage.
+Suite à cela, l'Arduino pourra envoyer ses valeurs de capteur avec \texttt{cmd = DATA} et les autres champs remplis en conséquence.
 
 \end{document}
