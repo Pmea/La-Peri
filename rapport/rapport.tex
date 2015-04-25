@@ -71,7 +71,6 @@
 
 \author{ Paul MABILLOT \& Adrien FERREIRA \& Pierre MAHÉ}
 \date{\today}
- 
 
 
 \begin{document} 
@@ -211,4 +210,141 @@ Au démarrage l'Arduino envoi un message avec \texttt{cmd = INIT } et se met en 
 De ce fait, si la carte Arduino venait à s'éteindre, elle cherchera à se re-synchroniser au démarrage.
 Suite à cela, l'Arduino pourra envoyer ses valeurs de capteur avec \texttt{cmd = DATA} et les autres champs remplis en conséquence.
 
+
+\section{Serveur}
+\subsection{Installation}
+\paragraph{}
+Dans cette partie, nous allons nous pencher sur code. Par un soucis de lisibilité nous n'allons pas commenter toute les fonctions, nous indiquerons autant que faire se peu les noms des fichiers et des fonctions, à vous de regarder dans les fichiers du projet le code exacte.
+\paragraph{}
+-Installation Apache2 et PHP
+\begin{lstlisting}
+sudo apt-get install apache2 php5 libapache2-mod-php5
+\end{lstlisting}
+\paragraph{}
+-Installation Mysql (inutile dans notre cas)
+\begin{lstlisting}
+sudo apt-get install mysql-server php5-mysql
+\end{lstlisting}
+-Installation Mysql (inutile dans notre cas)
+\begin{lstlisting}
+sudo apt-get install mysql-server php5-mysql
+\end{lstlisting}
+-Répertoire du serveur
+\begin{lstlisting}
+/var/www/
+\end{lstlisting}
+
+Commandes Serveur:
+\begin{lstlisting}
+$service apache2 stop : arreter serveur
+$service apache2 start : demarrer serveur
+$service apache2 restart : redemarrage serveur
+\end{lstlisting}
+
+\subsection{Mise en place}
+\subsubsection{Création de l'index.php}
+\paragraph{}
+Dans un premier temps nous allons créer la page d’accueil de notre station météo.
+On souhaite y afficher les informations en temps réel ainsi qu'un graphique regroupant les informations des derniers jours.\\ \\ 
+Dans la section \textit{"station"} nous afficherons les données\\
+Dans la section \textit{"recap"} nous afficherons le graphique\\
+
+
+\begin{lstlisting}
+<!DOCTYPE html>
+		<html>
+			<head>
+			<meta name="description" content="Bienvenue sur le site de meteorologique SAR" />
+			<meta charset="utf-8" />
+			<link rel="stylesheet" href="css/style.css" />
+			<title>Site meteorologique</title>
+			</head>
+
+			<body>
+			<section id="meteo">
+				<h1>Station Meteo</h1>
+			
+				<section id="station">
+				</section>
+				
+				<section id="recap">				
+				</section>
+			</section>
+			</body>
+		</html>
+\end{lstlisting}
+
+Votre raspbery ne sera pas forcement connecté à internet, il est donc important d'importer les librairies pour assurer le bon fonctionnement de votre station météo même hors ligne.\\
+C'est pour cela que nous avons choisi la bibliothèque jquery et jqPlot.\\ Le code suivant est a ajouter dans le \textit{<head>}.
+\paragraph{}
+La librairie jquery :
+\begin{lstlisting}
+<script src="js/jquery-1.11.2.min.js"></script>	
+\end{lstlisting}
+La libraire de gestion de graphique jqPlot:
+\begin{lstlisting}
+	<script type="text/javascript" src="js/jqPlot/jquery.jqplot.min.js"></script>	
+    	<script type="text/javascript" src="js/jqPlot/plugins/jqplot.canvasTextRenderer.min.js"></script>
+	<script type="text/javascript" src="js/jqPlot/plugins/jqplot.canvasAxisLabelRenderer.min.js"></script>	
+\end{lstlisting}
+
+\subsubsection{Récupération de la valeur}
+\paragraph{}
+Les données envoyés par votre arduino sur votre raspberry (voir plus haut) sont sauvegardés dans le fichier xml/fichier.xml de votre serveur apache. Nous allons écrire une fonction PHP permettant de récupérer la dernière valeur ajoutée dans ce fichier.
+\begin{lstlisting}
+function getLastValue($path){
+		$fp = fopen($path, "r");
+		
+		if (flock($fp, LOCK_SH)) {
+			$xml = simplexml_load_file($path);
+			flock($fp, LOCK_UN);
+			$taille = sizeof($xml);
+			$last = $xml->timestamp[$taille-1];	
+		}
+		return $last['valeur'].' '.$last->temperature.' '.$last->humidite.' '.$last->luminosite;
+	}	
+\end{lstlisting}
+\paragraph{}
+La fonction getLastValue, qui prend en paramètre le chemin vers votre fichier XML, s'occupe d'ouvrir ce fichier en lecture seul.\\
+On verrou est alors placé pour éviter une écriture durant la lecture.\\
+La fonction \texttt{simplexml\_load\_file} s'occupe de parser un fichier XML et retourne un objet facilement navigable.\\
+Une fois l'objet obtenu on relâche le verrou. \\
+On s'occupe de récupérer le nombre total d’élément dans le fichier XML afin de récupérer le dernier timestamp que l'on stock.\\
+La fonction retourne alors le timestamp, la température, l'humidité et la luminosité du dernier envoi.\\
+
+\subsubsection{Rafraîchissement automatique}
+\paragraph{}
+Afin de rendre notre page dynamique nous souhaitons que les derniers valeurs envoyés par nos sondes soient directement affichés. Pour cela nous allons utilisé notre fonction PHP écrite précédemment.\\
+Malheureusement comme le PHP est géré coté serveur il est impossible de réaliser cela sans l'aide de javascript.\\
+Pour cela, il faut utiliser le fichier \texttt{getLast.php} qui va lui même appeler le fichier \texttt{loadData.js}, Qui va appeler toute les 1000ms une fonction qui va retourner les nouvelles valeurs du timestamp, de la temperatuyre, de l'humidité et de la luminosité.\\
+Il ne bous reste plus qu'à traiter ces données.\\
+Pour la luminosité on avons decider de faire l'approximation suivant: si il y a beaucoup de lumière alors on peut considérer qu'il fait beau si au contraire il y a peu de lumière alors nous pouvons dire que le temps est couvert. De plus nous avons ajouter un balance jour/nuit (cf. fonction \texttt{traitementLumino}).
+Le traitement permet de charger des différentes images dans le html, selon le temps qu'il fait.
+
+\subsubsection{La partie Graphique}
+\paragraph{}
+ Nous afficherons les données des 3 derniers jours sur notre graphique lors du chargement de la page. Pour cela nous savons que chaque information est reçu toute les 1s, il faut donc traiter 86400 événements par jour, soit dans notre cas 259200 événements (60*60*24*3) (cf. \texttt{loadGraphe.php}).\\
+Nous ne souhaitons pas réafficher le graphique après chaque réception de donnée, cela serai trop lourd pour notre serveur.\\ Contrairement aux données, nous recalculons le graphique qu'au moment du rafraîchissement de la page par le navigateur web. \\
+Nous avons utiliser un fonction javascript pour afficher le graphique.
+\begin{lstlisting}
+function getAllValues()
+\end{lstlisting}
+Comme précédemment la fonction ouvre le fichier XML, positionne le verrou, mais ici elle va sauvegarder uniquement les données des 259200 événements disponibles et retourner un tableau.\\
+Afin de fournir ces données à la bibliothèque \textit{jqPLot}, voir le fichier \texttt{loadGraph.php}.
+\begin{lstlisting}
+<?php 
+	include("gestionFile.php"); 
+	/* Recuperer les timestamp dans le fichier XML */
+	$res = getAllValues("xml/fichier.xml");
+	$tabjs = php2js($res);
+?>
+\end{lstlisting}
+Le code PHP récupères les données et les mets en forme pour le javascript à l'aide de la fonction \textit{php2js}.\\
+\subsubsection{Bonus}
+\paragraph{}
+Il est possible de faire de la mise ne page en ajoutant des feuilles de style.
 \end{document}
+
+
+
+
