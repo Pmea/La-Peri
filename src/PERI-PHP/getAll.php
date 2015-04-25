@@ -1,5 +1,7 @@
  <?php 
 	include("gestionFile.php"); 
 	/* Recuperer les timestamp dans le fichier XML */
-	echo getAllValues("xml/fichier.xml");
+	$tab = getAllValues("xml/fichier.xml");
+
+	return php2js($tab);
 ?>

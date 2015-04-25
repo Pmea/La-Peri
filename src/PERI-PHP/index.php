@@ -12,11 +12,10 @@
     <script type="text/javascript" src="js/jqPlot/plugins/jqplot.canvasTextRenderer.min.js"></script>
 	<script type="text/javascript" src="js/jqPlot/plugins/jqplot.canvasAxisLabelRenderer.min.js"></script>	
     <script src="js/loadData.js"></script>
-	<script src="js/loadGraphe.js"></script>
 	</head>
 	
 	<body>
-
+		<?php include("loadGraphe.php") ?>
 		<section id="meteo">
 			<h1>Station Méteo</h1>
 		

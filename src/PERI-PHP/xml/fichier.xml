@@ -1,27 +1,243 @@
 ﻿<meteo>
 	<timestamp valeur="13">
-		<luminosite>1</luminosite>
-		<temperature>1</temperature>
+		<luminosite>15</luminosite>
+		<temperature>20</temperature>
 		<humidite>15</humidite>
-	</timestamp>
+	</timestamp>				
 	<timestamp valeur="14">
-		<luminosite>1</luminosite>
-		<temperature>1</temperature>
-		<humidite>15</humidite>
-	</timestamp>
-	<timestamp valeur="15">
-		<luminosite>1</luminosite>
-		<temperature>1</temperature>
-		<humidite>15</humidite>
-	</timestamp>	
-	<timestamp valeur="16">
-		<luminosite>10</luminosite>
-		<temperature>10</temperature>
-		<humidite>150</humidite>
-	</timestamp>	
-	<timestamp valeur="17">
-		<luminosite>100</luminosite>
-		<temperature>16.0</temperature>
+		<luminosite>20</luminosite>
+		<temperature>25</temperature>
 		<humidite>10</humidite>
 	</timestamp>	
+	<timestamp valeur="15">
+		<luminosite>50</luminosite>
+		<temperature>45</temperature>
+		<humidite>29</humidite>
+	</timestamp>
+	<timestamp valeur="13">
+		<luminosite>15</luminosite>
+		<temperature>20</temperature>
+		<humidite>15</humidite>
+	</timestamp>				
+	<timestamp valeur="14">
+		<luminosite>20</luminosite>
+		<temperature>25</temperature>
+		<humidite>10</humidite>
+	</timestamp>	
+	<timestamp valeur="15">
+		<luminosite>50</luminosite>
+		<temperature>45</temperature>
+		<humidite>29</humidite>
+	</timestamp>
+	<timestamp valeur="13">
+		<luminosite>15</luminosite>
+		<temperature>20</temperature>
+		<humidite>15</humidite>
+	</timestamp>				
+	<timestamp valeur="14">
+		<luminosite>20</luminosite>
+		<temperature>25</temperature>
+		<humidite>10</humidite>
+	</timestamp>	
+	<timestamp valeur="15">
+		<luminosite>50</luminosite>
+		<temperature>45</temperature>
+		<humidite>29</humidite>
+	</timestamp>
+	<timestamp valeur="13">
+		<luminosite>15</luminosite>
+		<temperature>20</temperature>
+		<humidite>15</humidite>
+	</timestamp>				
+	<timestamp valeur="14">
+		<luminosite>20</luminosite>
+		<temperature>25</temperature>
+		<humidite>10</humidite>
+	</timestamp>	
+	<timestamp valeur="15">
+		<luminosite>50</luminosite>
+		<temperature>45</temperature>
+		<humidite>29</humidite>
+	</timestamp>
+	<timestamp valeur="13">
+		<luminosite>15</luminosite>
+		<temperature>20</temperature>
+		<humidite>15</humidite>
+	</timestamp>				
+	<timestamp valeur="14">
+		<luminosite>20</luminosite>
+		<temperature>25</temperature>
+		<humidite>10</humidite>
+	</timestamp>	
+	<timestamp valeur="15">
+		<luminosite>50</luminosite>
+		<temperature>45</temperature>
+		<humidite>29</humidite>
+	</timestamp>
+	<timestamp valeur="13">
+		<luminosite>15</luminosite>
+		<temperature>20</temperature>
+		<humidite>15</humidite>
+	</timestamp>				
+	<timestamp valeur="14">
+		<luminosite>20</luminosite>
+		<temperature>25</temperature>
+		<humidite>10</humidite>
+	</timestamp>	
+	<timestamp valeur="15">
+		<luminosite>50</luminosite>
+		<temperature>45</temperature>
+		<humidite>29</humidite>
+	</timestamp>
+	<timestamp valeur="13">
+		<luminosite>15</luminosite>
+		<temperature>20</temperature>
+		<humidite>15</humidite>
+	</timestamp>				
+	<timestamp valeur="14">
+		<luminosite>20</luminosite>
+		<temperature>25</temperature>
+		<humidite>10</humidite>
+	</timestamp>	
+	<timestamp valeur="15">
+		<luminosite>50</luminosite>
+		<temperature>45</temperature>
+		<humidite>29</humidite>
+	</timestamp>
+	<timestamp valeur="13">
+		<luminosite>15</luminosite>
+		<temperature>20</temperature>
+		<humidite>15</humidite>
+	</timestamp>				
+	<timestamp valeur="14">
+		<luminosite>20</luminosite>
+		<temperature>25</temperature>
+		<humidite>10</humidite>
+	</timestamp>	
+	<timestamp valeur="15">
+		<luminosite>50</luminosite>
+		<temperature>45</temperature>
+		<humidite>29</humidite>
+	</timestamp>
+	<timestamp valeur="13">
+		<luminosite>15</luminosite>
+		<temperature>20</temperature>
+		<humidite>15</humidite>
+	</timestamp>				
+	<timestamp valeur="14">
+		<luminosite>20</luminosite>
+		<temperature>25</temperature>
+		<humidite>10</humidite>
+	</timestamp>	
+	<timestamp valeur="15">
+		<luminosite>50</luminosite>
+		<temperature>45</temperature>
+		<humidite>29</humidite>
+	</timestamp>
+	<timestamp valeur="13">
+		<luminosite>15</luminosite>
+		<temperature>20</temperature>
+		<humidite>15</humidite>
+	</timestamp>				
+	<timestamp valeur="14">
+		<luminosite>20</luminosite>
+		<temperature>25</temperature>
+		<humidite>10</humidite>
+	</timestamp>	
+	<timestamp valeur="15">
+		<luminosite>50</luminosite>
+		<temperature>45</temperature>
+		<humidite>29</humidite>
+	</timestamp>
+	<timestamp valeur="13">
+		<luminosite>15</luminosite>
+		<temperature>20</temperature>
+		<humidite>15</humidite>
+	</timestamp>				
+	<timestamp valeur="14">
+		<luminosite>20</luminosite>
+		<temperature>25</temperature>
+		<humidite>10</humidite>
+	</timestamp>	
+	<timestamp valeur="15">
+		<luminosite>50</luminosite>
+		<temperature>45</temperature>
+		<humidite>29</humidite>
+	</timestamp>
+	<timestamp valeur="13">
+		<luminosite>15</luminosite>
+		<temperature>20</temperature>
+		<humidite>15</humidite>
+	</timestamp>				
+	<timestamp valeur="14">
+		<luminosite>20</luminosite>
+		<temperature>25</temperature>
+		<humidite>10</humidite>
+	</timestamp>	
+	<timestamp valeur="15">
+		<luminosite>50</luminosite>
+		<temperature>45</temperature>
+		<humidite>29</humidite>
+	</timestamp>
+	<timestamp valeur="13">
+		<luminosite>15</luminosite>
+		<temperature>20</temperature>
+		<humidite>15</humidite>
+	</timestamp>				
+	<timestamp valeur="14">
+		<luminosite>20</luminosite>
+		<temperature>25</temperature>
+		<humidite>10</humidite>
+	</timestamp>	
+	<timestamp valeur="15">
+		<luminosite>50</luminosite>
+		<temperature>45</temperature>
+		<humidite>29</humidite>
+	</timestamp>
+	<timestamp valeur="13">
+		<luminosite>15</luminosite>
+		<temperature>20</temperature>
+		<humidite>15</humidite>
+	</timestamp>				
+	<timestamp valeur="14">
+		<luminosite>20</luminosite>
+		<temperature>25</temperature>
+		<humidite>10</humidite>
+	</timestamp>	
+	<timestamp valeur="15">
+		<luminosite>50</luminosite>
+		<temperature>45</temperature>
+		<humidite>29</humidite>
+	</timestamp>
+	<timestamp valeur="13">
+		<luminosite>15</luminosite>
+		<temperature>20</temperature>
+		<humidite>15</humidite>
+	</timestamp>				
+	<timestamp valeur="14">
+		<luminosite>20</luminosite>
+		<temperature>25</temperature>
+		<humidite>10</humidite>
+	</timestamp>	
+	<timestamp valeur="15">
+		<luminosite>50</luminosite>
+		<temperature>45</temperature>
+		<humidite>29</humidite>
+	</timestamp>
+	<timestamp valeur="13">
+		<luminosite>15</luminosite>
+		<temperature>20</temperature>
+		<humidite>15</humidite>
+	</timestamp>				
+	<timestamp valeur="14">
+		<luminosite>20</luminosite>
+		<temperature>25</temperature>
+		<humidite>10</humidite>
+	</timestamp>	
+	<timestamp valeur="15">
+		<luminosite>50</luminosite>
+		<temperature>45</temperature>
+		<humidite>29</humidite>
+	</timestamp>
+
 </meteo>
