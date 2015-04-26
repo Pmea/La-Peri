@@ -205,16 +205,43 @@ radio.startListening();
 La manière de procéder et les fonctions à appeler sont les mêmes que pour l'Arduino.
 
 \section{Protocole de niveau applicatif}
+\subsection{Communication Arduino - Raspberry}
+\paragraph{}
 Pour pouvoir synchroniser les horloges des deux cartes, nous avons créé un protocole simple.
 Au démarrage l'Arduino envoi un message avec \texttt{cmd = INIT } et se met en attente de la réponse de la Raspberry. Quand elle reçoit ce paquet la Rasperry répond avec son estampille temporelle dans \texttt{timestamp} et \texttt{cmd = INIT}. L'Arduino sauvegarde cette valeur et l'utilisera pour dater ses envois (en l'incrémentant).
 De ce fait, si la carte Arduino venait à s'éteindre, elle cherchera à se re-synchroniser au démarrage.
 Suite à cela, l'Arduino pourra envoyer ses valeurs de capteur avec \texttt{cmd = DATA} et les autres champs remplis en conséquence.
+\subsection{Stockage des données dans la Raspberry}
+\paragraph{}
+Pour Stocker les données reçu la Raspberry Pi, notre programme écrit dans un fichier \texttt{XML}.\\
+Des que nous recevons un message, on écrit le timestamp et les valeurs associer.\\
+\textbf{Attention au lecture concurrente }(entre le programme C et le programme PHP), pensez à mettre des verrous lors de l’écriture et la lecture du fichier. \\
+\\
+Structure du fichier:
+\begin{lstlisting}
+<meteo>								
+	//// Premier echantillon				
+	<timestamp valeur="13">				// avec  le temps en seconde 
+		<luminosite>15</luminosite>		// La valeur des capteurs
+		<temperature>20</temperature>
+		<humidite>15</humidite>
+	</timestamp>		
+	// Second echantillon		
+	<timestamp valeur="14">					
+		<luminosite>20</luminosite>
+		<temperature>25</temperature>
+		<humidite>10</humidite>
+	</timestamp>
+</meteo>
+\end{lstlisting}
+
+Cette structure permet de faciliter les traitements et d'être facilement extensible si vous voulez ajouter un autre capteur.
 
 
 \section{Serveur}
 \subsection{Installation}
 \paragraph{}
-Dans cette partie, nous allons nous pencher sur code. Par un soucis de lisibilité nous n'allons pas commenter toute les fonctions, nous indiquerons autant que faire se peu les noms des fichiers et des fonctions, à vous de regarder dans les fichiers du projet le code exacte.
+Dans cette partie, nous allons nous pencher sur code. Par un soucis de lisibilité nous n'allons pas commenter tout le code. Nous indiquerons autant que faire se peu les noms des fichiers et des fonctions, à vous de regarder dans les fichiers du projet le code exacte.
 \paragraph{}
 -Installation Apache2 et PHP
 \begin{lstlisting}
