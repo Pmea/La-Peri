@@ -16,7 +16,7 @@ RF24 radio = RF24(RADIO_CE_PIN, RADIO_CS_PIN);
 
 
 /* sensor */
-int DELAY= 10000;    
+int DELAY=  60 * 1000;    
 
 int ledPin= 13;
 int photocellPin= 0;       
@@ -45,7 +45,7 @@ SimpleTimer timerSend;
 payload data;
 payload receiv;
 
-unsigned long timeStamp=0;   // ulong: 2^32= 13,8 ans si DELAY= 100 ms 138 ans si DELAY= 1s
+unsigned long timeStamp=0;   // ulong: 2^32= 13,8 ans si DELAY= 100 ms 138 ans si DELAY= 1s 
 
 
 void setup(void){
