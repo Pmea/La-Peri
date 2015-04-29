@@ -1,3 +1,4 @@
+#include <DHT.h>
 #include <SimpleTimer.h>
 #include <SPI.h>
 #include <RF24.h>
@@ -21,6 +22,14 @@ int ledPin= 13;
 int photocellPin= 0;       
 int temperatureCellPin= 1;
 
+// DHT11 sensor pins
+#define DHTPIN 2
+#define DHTTYPE DHT11
+ 
+// DHT instance
+DHT dht(DHTPIN, DHTTYPE);
+
+
 
 typedef struct t_payload{
         uint16_t cmd;
@@ -43,8 +52,11 @@ void setup(void){
   Serial.begin(9600);
   pinMode(A0, INPUT);
   pinMode(A1, INPUT);
+  pinMode(2, INPUT);
+  
   pinMode(13, OUTPUT);
 
+  dht.begin();
   
   radio.begin();
   radio.setPALevel(RF24_PA_MAX);
@@ -94,11 +106,13 @@ void sendData(void){
   data.cmd= DATA;
   data.valTemperature= analogRead(temperatureCellPin);       
   data.valLight= analogRead(photocellPin);
-  data.valHumidity= 0;
+  
+  data.valHumidity= dht.readHumidity();
   
    Serial.println(data.timeStamp);
   Serial.println(data.valTemperature);    //debbug
   Serial.println(data.valLight);
+  Serial.println(data.valHumidity);
   
    // commencer a emettre
     radio.stopListening();
