@@ -129,7 +129,6 @@ typedef struct t_payload{
 	uint16_t valHumidity;
 } payload;
 \end{lstlisting}
-%TODO changer t_payload
 Pour garantir l’interopérabilité, il est impératif de définir explicitement la taille des types manipulés.
 \textbf{Attention: certains compilateurs rajoutent des octets de bourrage pour aligner la taille de la structure en mémoire. Veillez donc à accorder les options des deux compilateurs (Arduino et Raspberry).}
 L'option \texttt{packed} peut être utilisée comme directive pour le compilateur.
@@ -157,12 +156,12 @@ La séquence d'instruction à utiliser pour initialiser le module nRF24 est:\\
 
 \begin{lstlisting}
 radio.begin();
-radio.setPALevel(RF24_PA_MAX);	// la force d'émission du signal
-radio.setDataRate(RF24_1MBPS);	// le débit de données
+radio.setPALevel(RF24_PA_MAX);	// la force d'emission du signal
+radio.setDataRate(RF24_1MBPS);	// le debit de donnees
 
-// Identifiant arbitraire du canal de émission 
+// Identifiant arbitraire du canal de emission 
 radio.openWritingPipe(0x0000000001LL);
-// Identifiant du canal de réception pour le pipe 1
+// Identifiant du canal de reception pour le pipe 1
 radio.openReadingPipe(1, 0x0000000002LL);
 \end{lstlisting}
 \paragraph{}
@@ -186,15 +185,15 @@ Pour communiquer avec la module nRF24L01+ depuis la Raspberry, utilisez les fonc
 La phase d'initialisation est similaire à celle de l'Arduino. 
 
 \begin{lstlisting}
-/* les deux premiers arguments sont les pins GPIO à utiliser pour CE et CS (définie BCM2835.h) la cadence du pin SPI.*/
+/* les deux premiers arguments sont les pins GPIO a utiliser pour CE et CS (definie BCM2835.h) la cadence du pin SPI.*/
 RF24 radio(BCM2835_SPI_CS_GPIO24, 800000, BCM2835_SPI_SPEED_8MHZ);
 radio.begin();
-radio.setPALevel(RF24_PA_MAX);		// la force d'émission du signal
-radio.setDataRate(RF24_1MBPS);		// le débit de données
+radio.setPALevel(RF24_PA_MAX);		// la force d'emission du signal
+radio.setDataRate(RF24_1MBPS);		// le debit de donnees
 
-// Identifiant du canal de réception pour le pipe 1
+// Identifiant du canal de reception pour le pipe 1
 radio.openReadingPipe(1,0x0000000001LL);		
-// Identifiant arbitraire du canal de émission 
+// Identifiant arbitraire du canal de emission 
 radio.openWritePipe(0x0000000002LL);
 
 radio.startListening();
@@ -220,13 +219,13 @@ Dès que nous recevons un message, on écrit le timestamp et les valeurs associe
 Structure du fichier:
 \begin{lstlisting}
 <meteo>								
-	<!-- Premier échantillon -->
+	<!-- Premier echantillon -->
 	<timestamp valeur="13">	<!-- avec  le temps en seconde -->
 		<luminosite>15</luminosite>	<!-- La valeur des capteurs -->
 		<temperature>20</temperature>
 		<humidite>15</humidite>
 	</timestamp>		
-	<!-- Second échantillon	-->
+	<!-- Second echantillon	-->
 	<timestamp valeur="14">					
 		<luminosite>20</luminosite>
 		<temperature>25</temperature>
@@ -257,9 +256,9 @@ sudo apt-get install mysql-server php5-mysql
 \paragraph{}
 -Commandes Serveur:
 \begin{lstlisting}
-$service apache2 stop : arrêter serveur
-$service apache2 start : démarrer serveur
-$service apache2 restart : redémarrage serveur
+$service apache2 stop : arreter serveur
+$service apache2 start : demarrer serveur
+$service apache2 restart : redemarrage serveur
 \end{lstlisting}
 
 \subsection{Mise en place}
@@ -366,7 +365,7 @@ Dans ce fichier nous récupérons les données via PHP. Le javascript les traite
 \begin{lstlisting}
 <?php 
 	include("gestionFile.php"); 
-	/* Récupérer les 4320 derniers timestamp dans le fichier XML */
+	/* Recuperer les 4320 derniers timestamp dans le fichier XML */
 	$res = getAllValues("xml/fichier.xml");
 	$tabjs = php2js($res);
 ?>

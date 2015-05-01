@@ -16,14 +16,14 @@ RF24 radio = RF24(RADIO_CE_PIN, RADIO_CS_PIN);
 
 
 /* sensor */
-int DELAY=  60 * 1000;    
+int DELAY=  /*60 */ 1000;    
 
 int ledPin= 13;
 int photocellPin= 0;       
-int temperatureCellPin= 1;
+int temperatureCellPin= A2;
 
 // DHT11 sensor pins
-#define DHTPIN 2
+#define DHTPIN 7
 #define DHTTYPE DHT11
  
 // DHT instance
@@ -52,7 +52,7 @@ void setup(void){
   Serial.begin(9600);
   pinMode(A0, INPUT);
   pinMode(A1, INPUT);
-  pinMode(2, INPUT);
+  pinMode(7, INPUT);
   
   pinMode(13, OUTPUT);
 
@@ -77,13 +77,13 @@ void setup(void){
    radio.stopListening();
    radio.write(&data, sizeof(payload));
    radio.startListening();
-   Serial.println("Ecriture");
+   Serial.println("Ecriture attente reponse");
    
    while(!radio.available()){
    }
    
    radio.read(&data, sizeof(payload));
-   Serial.println("Lecutre");
+   Serial.println("reponse recu, demarage ");
    
    timerSend.setInterval(DELAY, sendData);
 }
@@ -93,26 +93,27 @@ void loop(void){
   timerSend.run();
   if(radio.available()){
     radio.read(&receiv, sizeof(payload));
-    if(receiv.cmd == LEDON)
+
+    if(receiv.cmd == LEDON){
       digitalWrite(ledPin, HIGH);
-    if(receiv.cmd == LEDOFF)
+    }
+    if(receiv.cmd == LEDOFF){
       digitalWrite(ledPin, LOW);
+    }
   }
 }
 
-
+unsigned long save=0;
 void sendData(void){
   //recuperation valeurs capteurs
   data.cmd= DATA;
   data.valTemperature= analogRead(temperatureCellPin);       
   data.valLight= analogRead(photocellPin);
   
-  data.valHumidity= dht.readHumidity();
-  
-   Serial.println(data.timeStamp);
-  Serial.println(data.valTemperature);    //debbug
-  Serial.println(data.valLight);
-  Serial.println(data.valHumidity);
+  int tmp= dht.readHumidity();
+  if(!(tmp < 20 || tmp> 80)){
+    data.valHumidity= tmp;
+  }
   
    // commencer a emettre
     radio.stopListening();
