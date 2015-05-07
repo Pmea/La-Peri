@@ -12,7 +12,6 @@
 
 
 RF24 radio = RF24(RADIO_CE_PIN, RADIO_CS_PIN);
-//const uint64_t pipes[2] = { 0x0000000001LL, 0xF0F0F0F0D2LL };       
 
 
 /* sensor */
@@ -30,7 +29,6 @@ int temperatureCellPin= A2;
 DHT dht(DHTPIN, DHTTYPE);
 
 
-
 typedef struct t_payload{
         uint16_t cmd;
 	uint16_t timeStamp;
@@ -45,7 +43,15 @@ SimpleTimer timerSend;
 payload data;
 payload receiv;
 
-unsigned long timeStamp=0;   // ulong: 2^32= 13,8 ans si DELAY= 100 ms 138 ans si DELAY= 1s 
+
+int saveHumi;
+int saveTemp;
+
+int tmpHumi;
+int tmpTemp;
+
+
+unsigned long timeStamp=0;
 
 
 void setup(void){
@@ -86,6 +92,12 @@ void setup(void){
    Serial.println("reponse recu, demarage ");
    
    timerSend.setInterval(DELAY, sendData);
+   
+   
+   /* init capteur */
+    data.valLight= analogRead(photocellPin);
+    saveHumi= dht.readHumidity();
+    saveTemp= dht.readTemperature();
 }
 
 
@@ -103,16 +115,30 @@ void loop(void){
   }
 }
 
-unsigned long save=0;
+
 void sendData(void){
   //recuperation valeurs capteurs
   data.cmd= DATA;
-  data.valTemperature= analogRead(temperatureCellPin);       
+  
+  tmpTemp= dht.readTemperature(); //analogRead(temperatureCellPin);
+  
+  if( !( tmpTemp < (saveTemp * 0.8) || tmpTemp > (saveTemp * 1.2) ) ){
+    data.valTemperature= tmpTemp;
+    saveTemp= tmpTemp;
+  }
+  else{
+    data.valTemperature= saveTemp;
+  }
+  
   data.valLight= analogRead(photocellPin);
   
-  int tmp= dht.readHumidity();
-  if(!(tmp < 20 || tmp> 80)){
-    data.valHumidity= tmp;
+  int tmpHumi= dht.readHumidity();
+  if(!(tmpHumi < 20 || tmpHumi> 80)){
+    data.valHumidity= tmpHumi;
+    saveHumi= tmpHumi;
+  }
+  else{
+    data.valHumidity= saveHumi;
   }
   
    // commencer a emettre
