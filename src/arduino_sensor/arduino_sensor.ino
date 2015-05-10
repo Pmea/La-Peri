@@ -4,6 +4,9 @@
 #include <RF24.h>
 #include <RF24Network.h>
 
+#include <avr/wdt.h>
+
+
 #include "config.h"
 
 /* radio */
@@ -70,7 +73,7 @@ void setup(void){
   radio.openWritingPipe(   0x0000000001LL);
   radio.openReadingPipe(1, 0x0000000002LL);
   
-   radio.startListening();
+  radio.startListening();
   
   /// pour recuperer le time de l'ordinateur
    data.cmd= INIT;
@@ -98,10 +101,13 @@ void setup(void){
     data.valLight= analogRead(photocellPin);
     saveHumi= dht.readHumidity();
     saveTemp= dht.readTemperature();
+    
+    wdt_enable(WDTO_8S);
 }
 
 
 void loop(void){
+  wdt_reset();
   timerSend.run();
   if(radio.available()){
     radio.read(&receiv, sizeof(payload));
